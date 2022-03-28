@@ -1,0 +1,114 @@
+html {
+  color: #000000;
+  background: #FFFFFF;
+  -webkit-transition: all 1s ease 0s;
+  transition: all 1s ease 0s;
+}
+
+body {
+  font-size: 20px;
+  font-family: Inter;
+  font-weight: 400;
+  -webkit-transition: all 1s ease 0s;
+  transition: all 1s ease 0s;
+}
+
+a {
+  color: inherit;
+  -webkit-transition: all 1s ease 0s;
+  transition: all 1s ease 0s;
+}
+
+a:hover {
+  color: #134d1d;
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: 700;
+  padding: 10px 60px;
+  background-image: url("./assets/img/beer.png"), url("./assets/img/homer.png");
+  background-position: left top, right top;
+  background-size: 60px;
+  background-repeat: no-repeat;
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 36px;
+  }
+}
+@media (max-width: 320px) {
+  h1 {
+    font-size: 32px;
+  }
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0px auto;
+  padding: 0px 20px;
+  -webkit-transition: all 1s ease 0s;
+  transition: all 1s ease 0s;
+}
+@media (max-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+@media (max-width: 320px) {
+  .container {
+    max-width: 320px;
+  }
+}
+
+.button {
+  height: 40px;
+  padding: 0px 10px;
+  background: inherit;
+  border: 3px solid #000000;
+}
+
+.header-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 20px;
+  gap: 20px;
+}
+.header-container .farourites {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+}
+.header-container .search {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.header-container .search > input {
+  outline: none;
+  padding: 5px;
+  border-bottom: 3px solid gray;
+  height: 36px;
+}
+.header-container .search > button {
+  height: 36px;
+  width: 40px;
+  background-image: url("./assets/svg/search.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 28px;
+  background-color: inherit;
+}

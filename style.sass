@@ -1,0 +1,74 @@
+$white-color: #FFFFFF
+$black-color: #000000
+$extra-color: #134d1d
+
+html
+  color: $black-color
+  background: $white-color
+  transition: all 1s ease 0s
+body
+  font-size: 20px
+  font-family: Inter
+  font-weight: 400
+  transition: all 1s ease 0s
+a
+  color: inherit
+  transition: all 1s ease 0s
+a:hover
+  color: $extra-color
+h1
+  font-size: 40px
+  font-weight: 700
+  padding: 10px 60px
+  background-image: url("./assets/img/beer.png"), url("./assets/img/homer.png")
+  background-position: left top, right top
+  background-size: 60px
+  background-repeat: no-repeat
+  @media (max-width: 768px)
+    font-size: 36px
+  @media (max-width: 320px)
+    font-size: 32px
+
+.container
+  max-width: 1440px
+  margin: 0px auto
+  padding: 0px 20px
+  transition: all 1s ease 0s
+  @media (max-width: 1280px)
+    max-width: 1280px
+  @media (max-width: 768px)
+    max-width: 768px
+  @media (max-width: 320px)
+    max-width: 320px
+
+.button
+  height: 40px
+  padding: 0px 10px
+  background: inherit
+  border: 3px solid $black-color
+
+.header-container
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 20px
+  gap: 20px
+  .farourites
+    position: absolute
+    right: 30px
+    top: 30px
+  .search
+    display: flex
+    > input
+      outline: none
+      padding: 5px
+      border-bottom: 3px solid gray
+      height: 36px
+    > button
+      height: 36px
+      width: 40px
+      background-image: url("./assets/svg/search.svg")
+      background-position: center
+      background-repeat: no-repeat
+      background-size: 28px
+      background-color: inherit
