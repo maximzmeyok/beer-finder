@@ -1,11 +1,13 @@
-$white-color: #FFFFFF
-$black-color: #000000
-$extra-color: #134d1d
+$first-color: rgba(255, 255, 255, 1)
+$second-color: rgba(0, 0, 0, 1)
+$extra-color: rgba(0, 0, 0, 0.5)
+$invalid-color: rgba(255, 0, 0, 0.7)
 
 html
-  color: $black-color
-  background: $white-color
+  color: $second-color
+  background: $first-color
   transition: all 1s ease 0s
+  scroll-behavior: smooth
 body
   font-size: 20px
   font-family: Inter
@@ -32,7 +34,6 @@ h1
 .container
   max-width: 1440px
   margin: 0px auto
-  padding: 0px 20px
   transition: all 1s ease 0s
   @media (max-width: 1280px)
     max-width: 1280px
@@ -44,8 +45,12 @@ h1
 .button
   height: 40px
   padding: 0px 10px
-  background: inherit
-  border: 3px solid $black-color
+  background: $first-color
+  border: 3px solid $second-color
+.button:hover
+  background: $second-color
+  border: 3px solid $second-color
+  color: $first-color
 
 .header-container
   display: flex
@@ -59,12 +64,14 @@ h1
     top: 30px
   .search
     display: flex
-    > input
+    input
       outline: none
       padding: 5px
-      border-bottom: 3px solid gray
+      border-bottom: 3px solid $extra-color
       height: 36px
-    > button
+    .invalid
+      border-bottom: 4px solid $invalid-color
+    button
       height: 36px
       width: 40px
       background-image: url("./assets/svg/search.svg")
@@ -72,3 +79,48 @@ h1
       background-repeat: no-repeat
       background-size: 28px
       background-color: inherit
+  .history
+    display: flex
+    flex-wrap: wrap
+    gap: 10px
+    > div
+      border: 3px solid $extra-color
+      color: $extra-color
+      padding: 5px
+      cursor: pointer
+    > div:hover
+      background: $extra-color
+      border: 3px solid $extra-color
+      color: $first-color
+      opacity: 0.5
+
+.main-container
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-around
+  align-items: start
+  padding: 20px
+  gap: 20px
+  > div
+    position: relative
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 20px
+    padding: 20px
+    width: 320px
+    height: 550px
+    border: 3px solid $second-color
+    text-align: center
+    img
+      height: 300px
+    button
+      position: absolute
+      right: 10px
+      top: 10px
+  .error
+    background: $invalid-color
+    border: 3px solid $invalid-color
+    color: $first-color
+    padding: 20px
+    height: inherit
