@@ -8,7 +8,7 @@ export class Beer {
   getHtml() {
     return `
     <div>
-      <img src="${this.image}" alt="">
+      <img src="${this.image}" alt="Image">
       <h2>${this.name}</h2>
       <p>${shortText(this.description)}</p>
       <button class="button">Add</button>
