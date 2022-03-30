@@ -2,6 +2,7 @@ $first-color: rgba(255, 255, 255, 1)
 $second-color: rgba(0, 0, 0, 1)
 $extra-color: rgba(0, 0, 0, 0.5)
 $invalid-color: rgba(255, 0, 0, 0.7)
+$warning-color: rgb(255, 238, 0, 0.7)
 
 html
   color: $second-color
@@ -98,7 +99,7 @@ h1
   display: flex
   flex-wrap: wrap
   justify-content: space-around
-  align-items: start
+  align-items: center
   padding: 20px
   gap: 20px
   > div
@@ -106,6 +107,7 @@ h1
     display: flex
     flex-direction: column
     align-items: center
+    justify-content: center
     gap: 20px
     padding: 20px
     width: 320px
@@ -118,9 +120,19 @@ h1
       position: absolute
       right: 10px
       top: 10px
+  .load-button:hover
+    cursor: pointer
+    background: $second-color
+    color: $first-color
   .error
     background: $invalid-color
     border: 3px solid $invalid-color
     color: $first-color
+    padding: 20px
+    height: inherit
+  .warning
+    background: $warning-color
+    border: 3px solid $warning-color
+    color: $second-color
     padding: 20px
     height: inherit

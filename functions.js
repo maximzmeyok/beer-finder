@@ -14,30 +14,43 @@ export function markValid(element) {
   element.classList.remove('invalid');
 }
 
-export function makeRequest(pageCount, searchValue) {
+export function searchProducts(pageCount, searchValue) {
   productsArea.innerHTML = '';
-  fetch(`https://api.punkapi.com/v2/beers?page=${pageCount}&per_page=12&beer_name=${searchValue}`)
+  fetch(`https://api.punkapi.com/v2/beers?page=${pageCount}&per_page=5&beer_name=${searchValue}`)
   .then(response => response.json())
   .then(beers => {
-    if (beers.length === 0) {
+    if (!beers.length) {
       showError();
       productsArea.scrollIntoView();
+
       return;
     }
 
     searchHistory.add(searchValue);
     showSearchHistory();
     showProducts(beers);
+    showLoadButton();
     productsArea.scrollIntoView();
+  });
+}
+
+export function searchMoreProducts(pageCount, searchValue) {
+  fetch(`https://api.punkapi.com/v2/beers?page=${pageCount}&per_page=6&beer_name=${searchValue}`)
+  .then(response => response.json())
+  .then(beers => {
+    if (!beers.length) {
+      showWarning();
+
+      return;
+    }
+
+    showProducts(beers);
+    showLoadButton();
   });
 }
 
 export function showProducts(products) {
   products.forEach(item => {
-    if (areAllProperties(item)) {
-      return;
-    }
-
     const product = new Beer({
       name: item.name,
       image: item.image_url,
@@ -57,6 +70,14 @@ export function showError() {
   productsArea.append(errorElement);
 }
 
+export function showWarning() {
+  const warningElement = document.createElement('div');
+
+  warningElement.classList.add('warning');
+  warningElement.innerHTML = 'There are no more beers in this search.';
+  productsArea.append(warningElement);
+}
+
 export function shortText(text) {
   return `${text.substring(0, 130)}...`;
 }
@@ -64,7 +85,7 @@ export function shortText(text) {
 export function showSearchHistory() {
   historyArea.innerHTML = '';
 
-  if (searchHistory.length === 0) {
+  if (!searchHistory.size) {
     return;
   }
 
@@ -76,6 +97,23 @@ export function showSearchHistory() {
   });
 }
 
-export function areAllProperties(object) {
-  return object.id === null || object.name === null || object.image_url === null || object.description === null;
+export function isValidProduct(object) {
+  return !object.id || !object.name || !object.image_url || !object.description;
+}
+
+export function showLoadButton() {
+  const loadButton = document.createElement('div');
+
+  loadButton.classList.add('load-button');
+  loadButton.id = 'loadButton';
+  loadButton.innerHTML = 'Load more';
+  productsArea.append(loadButton);
+
+  loadButton.addEventListener('click', function() {
+    removeElement(loadButton);
+  });
+}
+
+export function removeElement(element) {
+  element.remove();
 }
