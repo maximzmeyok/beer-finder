@@ -1,4 +1,4 @@
-import { searchInput, searchButton, productsArea } from './elements.js';
+import { searchInput, searchButton, productsArea, arrowButton } from './elements.js';
 import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts } from './functions.js';
 
 export const REGEXP = new RegExp("^[a-zA-Z0-9а-яА-ЯёЁ ]+$");
@@ -38,4 +38,18 @@ productsArea.addEventListener('click', function(event) {
     pageCount++;
     searchMoreProducts(pageCount, searchInput.value);
   }
+});
+
+document.addEventListener('scroll', function() {
+  if (window.scrollY === 0) {
+    arrowButton.classList.add('hide');
+    
+    return;
+  }
+
+  arrowButton.classList.remove('hide');
+});
+
+arrowButton.addEventListener('click', function() {
+  document.body.scrollIntoView();
 });
