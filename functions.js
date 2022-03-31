@@ -92,6 +92,7 @@ export function showSearchHistory() {
   searchHistory.forEach(item => {
     const itemElement = document.createElement('div');
 
+    itemElement.classList.add('history-item');
     itemElement.innerHTML = item;
     historyArea.append(itemElement);
   });
