@@ -191,6 +191,14 @@ h1 {
   background: black;
   color: white;
 }
+.main-container .remove-button {
+  background: black;
+  color: white;
+}
+.main-container .remove-button:hover {
+  background: white;
+  color: black;
+}
 .main-container .error {
   background: rgba(255, 0, 0, 0.7);
   border: 3px solid rgba(255, 0, 0, 0.7);
@@ -209,11 +217,13 @@ h1 {
 .arrow {
   cursor: pointer;
   position: fixed;
-  right: 30px;
-  bottom: 30px;
+  right: 35px;
+  bottom: 35px;
   padding: 10px;
   font-size: 40px;
   border: 3px solid black;
+  background: white;
+  z-index: 100;
 }
 
 .arrow:hover {

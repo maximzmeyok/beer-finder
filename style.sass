@@ -124,6 +124,12 @@ h1
     cursor: pointer
     background: $second-color
     color: $first-color
+  .remove-button
+    background: $second-color
+    color: $first-color
+  .remove-button:hover
+    background: $first-color
+    color: $second-color
   .error
     background: $invalid-color
     border: 3px solid $invalid-color
@@ -140,11 +146,13 @@ h1
 .arrow
   cursor: pointer
   position: fixed
-  right: 30px
-  bottom: 30px
+  right: 35px
+  bottom: 35px
   padding: 10px
   font-size: 40px
   border: 3px solid $second-color
+  background: $first-color
+  z-index: 100
 .arrow:hover
   background: $second-color
   color: $first-color
