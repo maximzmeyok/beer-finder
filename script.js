@@ -1,12 +1,12 @@
-import { searchInput, searchButton, productsArea, arrowButton, historyArea } from './elements.js';
-import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView } from './functions.js';
+import { searchInput, searchButton, productsArea, arrowButton, historyArea, favoritesButton } from './elements.js';
+import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView, refreshFavoritesButton, showFavoriteList } from './functions.js';
 
 export const REGEXP = new RegExp("^[a-zA-Z0-9а-яА-ЯёЁ ]+$");
 export const searchHistory = new Set();
 export const foundBeers = [];
-export const fovoritesBeers = [];
+export const favoritesBeers = [];
 
-let pageCount = 1;
+export let pageCount = 1;
 
 searchButton.addEventListener('click', function() {
   const searchValue = searchInput.value;
@@ -46,11 +46,13 @@ productsArea.addEventListener('click', function(event) {
   if (isAddButton) {
     changeButtonView(event.target);
     addBeerToFavorites(event.target.id);
+    refreshFavoritesButton();
   }
 
   if (isRemoveButton) {
     changeButtonView(event.target);
     removeBeerFromFavorites(event.target.id);
+    refreshFavoritesButton();
   }
 });
 
@@ -77,4 +79,12 @@ historyArea.addEventListener('click', function(event) {
     searchInput.value = searchValue;
     searchProducts(pageCount, searchValue);
   }
+});
+
+favoritesButton.addEventListener('click', function() {
+  if (!favoritesBeers.length) {
+    return;
+  }
+  
+  showFavoriteList();
 });
