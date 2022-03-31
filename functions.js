@@ -1,5 +1,5 @@
 import { Beer } from './Beer.js';
-import { REGEXP, searchHistory } from './script.js';
+import { REGEXP, searchHistory, foundBeers, fovoritesBeers } from './script.js';
 import { productsArea } from './elements.js';
 
 export function isValidRequest(searchRequest) {
@@ -58,6 +58,7 @@ export function showProducts(products) {
       id: item.id,
     });
 
+    foundBeers.push(product);
     productsArea.innerHTML += product.getHtml();
   });
 }
@@ -117,4 +118,32 @@ export function showLoadButton() {
 
 export function removeElement(element) {
   element.remove();
+}
+
+export function addBeerToFavorites(id) {
+  const currentBeer = foundBeers.find(item => item.id == id);
+
+  fovoritesBeers.push(currentBeer);
+}
+
+export function removeBeerFromFavorites(id) {
+  const currentBeerIndex = fovoritesBeers.findIndex(item => item.id == id);
+
+  fovoritesBeers.splice(currentBeerIndex, 1);
+}
+
+export function changeButtonView(element) {
+  const isAddButton = element.classList.contains('add-button');
+
+  if (isAddButton) {
+    element.classList.remove('add-button');
+    element.classList.add('remove-button');
+    element.innerHTML = 'Remove';
+    
+    return;
+  }
+
+  element.classList.remove('remove-button');
+  element.classList.add('add-button');
+  element.innerHTML = 'Add';
 }

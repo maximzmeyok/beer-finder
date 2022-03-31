@@ -1,8 +1,10 @@
 import { searchInput, searchButton, productsArea, arrowButton, historyArea } from './elements.js';
-import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts } from './functions.js';
+import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView } from './functions.js';
 
 export const REGEXP = new RegExp("^[a-zA-Z0-9а-яА-ЯёЁ ]+$");
 export const searchHistory = new Set();
+export const foundBeers = [];
+export const fovoritesBeers = [];
 
 let pageCount = 1;
 
@@ -33,10 +35,22 @@ searchInput.addEventListener('keydown', function(event) {
 
 productsArea.addEventListener('click', function(event) {
   const isLoadMoreButton = event.target.classList.contains('load-button');
+  const isAddButton = event.target.classList.contains('add-button');
+  const isRemoveButton = event.target.classList.contains('remove-button');
   
   if (isLoadMoreButton) {
     pageCount++;
     searchMoreProducts(pageCount, searchInput.value);
+  }
+
+  if (isAddButton) {
+    changeButtonView(event.target);
+    addBeerToFavorites(event.target.id);
+  }
+
+  if (isRemoveButton) {
+    changeButtonView(event.target);
+    removeBeerFromFavorites(event.target.id);
   }
 });
 
