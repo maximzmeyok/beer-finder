@@ -51,12 +51,14 @@ export function searchMoreProducts(pageCount, searchValue) {
 
 export function showProducts(products) {
   products.forEach(item => {
+    const isFavoriteItem = favoritesBeers.find(favoritesBeer => favoritesBeer.id === item.id) ? true : false;
+
     const product = new Beer({
       name: item.name,
       image: item.image_url,
       description: item.description,
       id: item.id,
-      isFavorite: false,
+      isFavorite: isFavoriteItem,
     });
 
     foundBeers.push(product);
@@ -130,10 +132,14 @@ export function addBeerToFavorites(id) {
 
 export function removeBeerFromFavorites(id) {
   const currentBeerIndex = favoritesBeers.findIndex(item => item.id == id);
-  const currentBeer = foundBeers.find(item => item.id == id);
-
-  currentBeer.isFavorite = false;
+  
   favoritesBeers.splice(currentBeerIndex, 1);
+
+  if (foundBeers.length) {
+    const currentBeer = foundBeers.find(item => item.id == id);
+
+    currentBeer.isFavorite = false;
+  }
 }
 
 export function changeButtonView(element) {
