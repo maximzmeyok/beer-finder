@@ -1,5 +1,5 @@
 import { Beer } from './Beer.js';
-import { REGEXP, searchHistory, foundBeers, fovoritesBeers } from './script.js';
+import { REGEXP, searchHistory, foundBeers, favoritesBeers, pageCount } from './script.js';
 import { productsArea } from './elements.js';
 
 export function isValidRequest(searchRequest) {
@@ -123,13 +123,16 @@ export function removeElement(element) {
 export function addBeerToFavorites(id) {
   const currentBeer = foundBeers.find(item => item.id == id);
 
-  fovoritesBeers.push(currentBeer);
+  currentBeer.isFavorite = true;
+  favoritesBeers.push(currentBeer);
 }
 
 export function removeBeerFromFavorites(id) {
-  const currentBeerIndex = fovoritesBeers.findIndex(item => item.id == id);
+  const currentBeerIndex = favoritesBeers.findIndex(item => item.id == id);
+  const currentBeer = foundBeers.find(item => item.id == id);
 
-  fovoritesBeers.splice(currentBeerIndex, 1);
+  currentBeer.isFavorite = false;
+  favoritesBeers.splice(currentBeerIndex, 1);
 }
 
 export function changeButtonView(element) {
@@ -146,4 +149,77 @@ export function changeButtonView(element) {
   element.classList.remove('remove-button');
   element.classList.add('add-button');
   element.innerHTML = 'Add';
+}
+
+export function refreshFavoritesButton() {
+  const favoritesBeersCount = favoritesBeers.length;
+
+  if (!favoritesBeersCount) {
+    favoritesButton.innerHTML = 'Favorites';
+    
+    return;
+  }
+
+  favoritesButton.innerHTML = `Favorites (${favoritesBeers.length})`;
+}
+
+export function showFavoriteList() {
+  createFavoritesArea();
+
+  const favoritesArea = document.getElementById('favoritesArea');
+  
+  favoritesBeers.forEach(item => {
+    const product = new Beer({
+      name: item.name,
+      image: item.image,
+      description: item.description,
+      id: item.id,
+      isFavorite: item.isFavorite,
+    });
+
+    favoritesArea.innerHTML += product.getHtml();
+  });
+
+  favoritesArea.addEventListener('click', function(event) {
+    const isRemoveButton = event.target.classList.contains('remove-button');
+
+    if (!isRemoveButton) {
+      return;
+    }
+
+    changeButtonView(event.target);
+    removeBeerFromFavorites(event.target.id);
+    refreshFavoritesButton();
+
+    if (!favoritesBeers.length) {
+      const favoritesWrapper = document.querySelector('.favorites-wrapper');
+      const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
+
+      favoritesWrapper.remove();
+      changeButtonView(productsAreaItem);
+      
+      return;
+    }
+
+    favoritesArea.innerHTML ='';
+    favoritesBeers.forEach(item => {
+      const product = new Beer({
+        name: item.name,
+        image: item.image,
+        description: item.description,
+        id: item.id,
+        isFavorite: item.isFavorite,
+      });
+
+      favoritesArea.innerHTML += product.getHtml();
+    });
+  });
+}
+
+export function createFavoritesArea() {
+  const favoritesWrapper = document.createElement('section');
+
+  favoritesWrapper.classList.add('favorites-wrapper');
+  favoritesWrapper.innerHTML = `<div class="container favorites-container" id="favoritesArea"></div>`;
+  productsArea.after(favoritesWrapper);
 }
