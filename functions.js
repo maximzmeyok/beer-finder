@@ -209,6 +209,12 @@ export function createModalArea() {
       modalWrapper.remove();
     }
   });
+
+  document.addEventListener('keydown', function(event) {
+    if (event.code == 'Escape') {
+      modalWrapper.remove();
+    }
+  });
 }
 
 export function fillModalByFavorites() {
@@ -235,9 +241,10 @@ export function showSingleItem(itemId) {
   modalArea.addEventListener('click', function(event) {
     const isRemoveButton = event.target.classList.contains('remove-button');
     const isAddButton = event.target.classList.contains('add-button');
-    const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
 
     if (isRemoveButton) {
+      const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
+
       changeButtonView(event.target);
       changeButtonView(productsAreaItem);
       removeBeerFromFavorites(event.target.id);
@@ -245,6 +252,8 @@ export function showSingleItem(itemId) {
     }
 
     if (isAddButton) {
+      const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
+
       changeButtonView(event.target);
       changeButtonView(productsAreaItem);
       addBeerToFavorites(event.target.id);
