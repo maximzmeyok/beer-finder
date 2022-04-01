@@ -283,3 +283,24 @@ export function addListenersInModalArea(modalWrapper) {
     }
   });
 }
+
+export function setLocalStorage() {
+  localStorage.setItem('searchHistory', JSON.stringify(Array.from(searchHistory)));
+  localStorage.setItem('favoritesBeers', JSON.stringify(favoritesBeers));
+}
+
+export function getLocalStorage() {
+  if (localStorage.getItem('searchHistory')) {
+    const searchHistoryStorage = JSON.parse(localStorage.getItem('searchHistory'));
+
+    searchHistoryStorage.forEach(item => searchHistory.add(item));
+    showSearchHistory();
+  }
+
+  if (localStorage.getItem('favoritesBeers')) {
+    const favoritesBeersStorage = JSON.parse(localStorage.getItem('favoritesBeers'));
+
+    favoritesBeersStorage.forEach(item => favoritesBeers.push(item));
+    refreshFavoritesButton();
+  }
+}

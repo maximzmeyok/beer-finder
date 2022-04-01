@@ -1,5 +1,5 @@
 import { SEARCH_INPUT, SEARCH_BUTTON, PRODUCTS_AREA, ARROW_BUTTON, HISTORY_AREA, FAVORITES_BUTTON } from './elements.js';
-import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView, refreshFavoritesButton, showFavoriteList, showSingleItem, showSearchHistory } from './functions.js';
+import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView, refreshFavoritesButton, showFavoriteList, showSingleItem, setLocalStorage, getLocalStorage } from './functions.js';
 
 export const REGEXP = new RegExp("^[a-zA-Z0-9а-яА-ЯёЁ ]+$");
 export const searchHistory = new Set();
@@ -94,27 +94,6 @@ FAVORITES_BUTTON.addEventListener('click', function() {
   showFavoriteList();
 });
 
-function setLocalStorage() {
-  localStorage.setItem('searchHistory', JSON.stringify(Array.from(searchHistory)));
-  localStorage.setItem('favoritesBeers', JSON.stringify(favoritesBeers));
-}
-
 window.addEventListener('beforeunload', setLocalStorage);
-
-function getLocalStorage() {
-  if (localStorage.getItem('searchHistory')) {
-    const searchHistoryStorage = JSON.parse(localStorage.getItem('searchHistory'));
-
-    searchHistoryStorage.forEach(item => searchHistory.add(item));
-    showSearchHistory();
-  }
-
-  if (localStorage.getItem('favoritesBeers')) {
-    const favoritesBeersStorage = JSON.parse(localStorage.getItem('favoritesBeers'));
-
-    favoritesBeersStorage.forEach(item => favoritesBeers.push(item));
-    refreshFavoritesButton();
-  }
-}
 
 window.addEventListener('load', getLocalStorage);
