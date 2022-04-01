@@ -164,21 +164,20 @@ export function refreshFavoritesButton() {
 }
 
 export function showFavoriteList() {
-  createFavoritesArea();
+  createModalArea();
 
-  const favoritesArea = document.getElementById('favoritesArea');
+  const modalArea = document.getElementById('modalArea');
   
-  fillFavoritesArea();
+  fillModalByFavorites();
 
-  favoritesArea.addEventListener('click', function(event) {
+  modalArea.addEventListener('click', function(event) {
     const isRemoveButton = event.target.classList.contains('remove-button');
-    const favoritesWrapper = document.querySelector('.favorites-wrapper');
+    const modalWrapper = document.querySelector('.modal-wrapper');
     const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
 
     if (!isRemoveButton) {
       return;
     }
-
 
     changeButtonView(event.target);
     changeButtonView(productsAreaItem);
@@ -186,25 +185,33 @@ export function showFavoriteList() {
     refreshFavoritesButton();
 
     if (!favoritesBeers.length) {
-      favoritesWrapper.remove();
+      modalWrapper.remove();
       
       return;
     }
 
-    favoritesArea.innerHTML ='';
-    fillFavoritesArea();
+    modalArea.innerHTML ='';
+    fillModalByFavorites();
   });
 }
 
-export function createFavoritesArea() {
-  const favoritesWrapper = document.createElement('section');
+export function createModalArea() {
+  const modalWrapper = document.createElement('section');
 
-  favoritesWrapper.classList.add('favorites-wrapper');
-  favoritesWrapper.innerHTML = `<div class="container favorites-container" id="favoritesArea"></div>`;
-  PRODUCTS_AREA.after(favoritesWrapper);
+  modalWrapper.classList.add('modal-wrapper');
+  modalWrapper.innerHTML = `<div class="container modal-container" id="modalArea"></div>`;
+  PRODUCTS_AREA.after(modalWrapper);
+
+  modalWrapper.addEventListener('click', function(event) {
+    const ismodalWrapper = event.target.classList.contains('modal-wrapper');
+
+    if (ismodalWrapper) {
+      modalWrapper.remove();
+    }
+  });
 }
 
-export function fillFavoritesArea() {
+export function fillModalByFavorites() {
   favoritesBeers.forEach(item => {
     const product = new Beer({
       name: item.name,
@@ -214,6 +221,48 @@ export function fillFavoritesArea() {
       isFavorite: item.isFavorite,
     });
 
-    favoritesArea.innerHTML += product.getHtml();
+    modalArea.innerHTML += product.getHtml();
   });
+}
+
+export function showSingleItem(itemId) {
+  createModalArea();
+
+  const modalArea = document.getElementById('modalArea');
+  
+  fillModalBySingle(itemId);
+
+  modalArea.addEventListener('click', function(event) {
+    const isRemoveButton = event.target.classList.contains('remove-button');
+    const isAddButton = event.target.classList.contains('add-button');
+    const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
+
+    if (isRemoveButton) {
+      changeButtonView(event.target);
+      changeButtonView(productsAreaItem);
+      removeBeerFromFavorites(event.target.id);
+      refreshFavoritesButton();
+    }
+
+    if (isAddButton) {
+      changeButtonView(event.target);
+      changeButtonView(productsAreaItem);
+      addBeerToFavorites(event.target.id);
+      refreshFavoritesButton();
+    }
+  });
+}
+
+export function fillModalBySingle(itemId) {
+  const singleItem = foundBeers.find(item => item.id == itemId);
+
+  const product = new Beer({
+    name: singleItem.name,
+    image: singleItem.image,
+    description: singleItem.description,
+    id: singleItem.id,
+    isFavorite: singleItem.isFavorite,
+  });
+
+  modalArea.innerHTML = product.getHtml();
 }

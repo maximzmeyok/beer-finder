@@ -1,5 +1,5 @@
 import { SEARCH_INPUT, SEARCH_BUTTON, PRODUCTS_AREA, ARROW_BUTTON, HISTORY_AREA, FAVORITES_BUTTON } from './elements.js';
-import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView, refreshFavoritesButton, showFavoriteList } from './functions.js';
+import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView, refreshFavoritesButton, showFavoriteList, showSingleItem } from './functions.js';
 
 export const REGEXP = new RegExp("^[a-zA-Z0-9а-яА-ЯёЁ ]+$");
 export const searchHistory = new Set();
@@ -37,6 +37,7 @@ PRODUCTS_AREA.addEventListener('click', function(event) {
   const isLoadMoreButton = event.target.classList.contains('load-button');
   const isAddButton = event.target.classList.contains('add-button');
   const isRemoveButton = event.target.classList.contains('remove-button');
+  const isTitleButton = event.target.classList.contains('title-button');
   
   if (isLoadMoreButton) {
     pageCount++;
@@ -53,6 +54,10 @@ PRODUCTS_AREA.addEventListener('click', function(event) {
     changeButtonView(event.target);
     removeBeerFromFavorites(event.target.id);
     refreshFavoritesButton();
+  }
+
+  if (isTitleButton) {
+    showSingleItem(event.target.id);
   }
 });
 

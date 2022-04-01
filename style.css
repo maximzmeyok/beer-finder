@@ -44,6 +44,11 @@ h1 {
   }
 }
 
+h2 {
+  cursor: pointer;
+  font-weight: 700;
+}
+
 .container {
   max-width: 1440px;
   margin: 0px auto;
@@ -214,7 +219,7 @@ h1 {
   height: inherit;
 }
 
-.favorites-wrapper {
+.modal-wrapper {
   min-height: 100vh;
   width: 100vw;
   background: rgba(0, 0, 0, 0.5);
@@ -231,7 +236,7 @@ h1 {
       -ms-flex-align: center;
           align-items: center;
 }
-.favorites-wrapper .favorites-container {
+.modal-wrapper .modal-container {
   max-height: calc(100vh - 80px);
   background: white;
   display: -webkit-box;
@@ -248,7 +253,7 @@ h1 {
   gap: 20px;
   overflow-y: scroll;
 }
-.favorites-wrapper .favorites-container > div {
+.modal-wrapper .modal-container > div {
   position: relative;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -270,19 +275,19 @@ h1 {
   border: 3px solid black;
   text-align: center;
 }
-.favorites-wrapper .favorites-container > div img {
+.modal-wrapper .modal-container > div img {
   height: 300px;
 }
-.favorites-wrapper .favorites-container > div button {
+.modal-wrapper .modal-container > div button {
   position: absolute;
   right: 10px;
   top: 10px;
 }
-.favorites-wrapper .favorites-container .remove-button {
+.modal-wrapper .modal-container .remove-button {
   background: black;
   color: white;
 }
-.favorites-wrapper .favorites-container .remove-button:hover {
+.modal-wrapper .modal-container .remove-button:hover {
   background: white;
   color: black;
 }
