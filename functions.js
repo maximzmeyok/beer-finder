@@ -56,6 +56,7 @@ export function showProducts(products) {
       image: item.image_url,
       description: item.description,
       id: item.id,
+      isFavorite: false,
     });
 
     foundBeers.push(product);
@@ -202,19 +203,7 @@ export function createModalArea() {
   modalWrapper.innerHTML = `<div class="container modal-container" id="modalArea"></div>`;
   PRODUCTS_AREA.after(modalWrapper);
 
-  modalWrapper.addEventListener('click', function(event) {
-    const ismodalWrapper = event.target.classList.contains('modal-wrapper');
-
-    if (ismodalWrapper) {
-      modalWrapper.remove();
-    }
-  });
-
-  document.addEventListener('keydown', function(event) {
-    if (event.code == 'Escape') {
-      modalWrapper.remove();
-    }
-  });
+  addListenersInModalArea(modalWrapper);
 }
 
 export function fillModalByFavorites() {
@@ -241,10 +230,9 @@ export function showSingleItem(itemId) {
   modalArea.addEventListener('click', function(event) {
     const isRemoveButton = event.target.classList.contains('remove-button');
     const isAddButton = event.target.classList.contains('add-button');
+    const productsAreaItem = document.getElementById(event.target.id)?.nextElementSibling.nextElementSibling;
 
     if (isRemoveButton) {
-      const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
-
       changeButtonView(event.target);
       changeButtonView(productsAreaItem);
       removeBeerFromFavorites(event.target.id);
@@ -252,8 +240,6 @@ export function showSingleItem(itemId) {
     }
 
     if (isAddButton) {
-      const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
-
       changeButtonView(event.target);
       changeButtonView(productsAreaItem);
       addBeerToFavorites(event.target.id);
@@ -274,4 +260,20 @@ export function fillModalBySingle(itemId) {
   });
 
   modalArea.innerHTML = product.getHtml();
+}
+
+export function addListenersInModalArea(modalWrapper) {
+  document.addEventListener('click', function(event) {
+    const ismodalWrapper = event.target.classList.contains('modal-wrapper');
+
+    if (ismodalWrapper) {
+      modalWrapper.remove();
+    }
+  });
+
+  document.addEventListener('keydown', function(event) {
+    if (event.code == 'Escape') {
+      modalWrapper.remove();
+    }
+  });
 }

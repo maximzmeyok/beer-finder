@@ -2,8 +2,6 @@ import { shortText } from './functions.js';
 
 export class Beer {
   constructor(obj) {
-    this.isFavorite = false;
-
     Object.assign(this, obj);
   }
 
