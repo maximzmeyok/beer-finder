@@ -1,6 +1,6 @@
 import { Beer } from './Beer.js';
-import { REGEXP, searchHistory, foundBeers, favoritesBeers, pageCount } from './script.js';
-import { productsArea } from './elements.js';
+import { REGEXP, searchHistory, foundBeers, favoritesBeers } from './script.js';
+import { PRODUCTS_AREA, HISTORY_AREA, FAVORITES_BUTTON } from './elements.js';
 
 export function isValidRequest(searchRequest) {
   return searchRequest.match(REGEXP);
@@ -15,13 +15,13 @@ export function markValid(element) {
 }
 
 export function searchProducts(pageCount, searchValue) {
-  productsArea.innerHTML = '';
+  PRODUCTS_AREA.innerHTML = '';
   fetch(`https://api.punkapi.com/v2/beers?page=${pageCount}&per_page=5&beer_name=${searchValue}`)
   .then(response => response.json())
   .then(beers => {
     if (!beers.length) {
       showError();
-      productsArea.scrollIntoView();
+      PRODUCTS_AREA.scrollIntoView();
 
       return;
     }
@@ -30,7 +30,7 @@ export function searchProducts(pageCount, searchValue) {
     showSearchHistory();
     showProducts(beers);
     showLoadButton();
-    productsArea.scrollIntoView();
+    PRODUCTS_AREA.scrollIntoView();
   });
 }
 
@@ -56,10 +56,11 @@ export function showProducts(products) {
       image: item.image_url,
       description: item.description,
       id: item.id,
+      isFavorite: false,
     });
 
     foundBeers.push(product);
-    productsArea.innerHTML += product.getHtml();
+    PRODUCTS_AREA.innerHTML += product.getHtml();
   });
 }
 
@@ -68,7 +69,7 @@ export function showError() {
 
   errorElement.classList.add('error');
   errorElement.innerHTML = 'There were no properties found for the given location.';
-  productsArea.append(errorElement);
+  PRODUCTS_AREA.append(errorElement);
 }
 
 export function showWarning() {
@@ -76,7 +77,7 @@ export function showWarning() {
 
   warningElement.classList.add('warning');
   warningElement.innerHTML = 'There are no more beers in this search.';
-  productsArea.append(warningElement);
+  PRODUCTS_AREA.append(warningElement);
 }
 
 export function shortText(text) {
@@ -84,7 +85,7 @@ export function shortText(text) {
 }
 
 export function showSearchHistory() {
-  historyArea.innerHTML = '';
+  HISTORY_AREA.innerHTML = '';
 
   if (!searchHistory.size) {
     return;
@@ -95,7 +96,7 @@ export function showSearchHistory() {
 
     itemElement.classList.add('history-item');
     itemElement.innerHTML = item;
-    historyArea.append(itemElement);
+    HISTORY_AREA.append(itemElement);
   });
 }
 
@@ -109,7 +110,7 @@ export function showLoadButton() {
   loadButton.classList.add('load-button');
   loadButton.id = 'loadButton';
   loadButton.innerHTML = 'Load more';
-  productsArea.append(loadButton);
+  PRODUCTS_AREA.append(loadButton);
 
   loadButton.addEventListener('click', function() {
     removeElement(loadButton);
@@ -155,19 +156,57 @@ export function refreshFavoritesButton() {
   const favoritesBeersCount = favoritesBeers.length;
 
   if (!favoritesBeersCount) {
-    favoritesButton.innerHTML = 'Favorites';
+    FAVORITES_BUTTON.innerHTML = 'Favorites';
     
     return;
   }
 
-  favoritesButton.innerHTML = `Favorites (${favoritesBeers.length})`;
+  FAVORITES_BUTTON.innerHTML = `Favorites (${favoritesBeers.length})`;
 }
 
 export function showFavoriteList() {
-  createFavoritesArea();
+  createModalArea();
 
-  const favoritesArea = document.getElementById('favoritesArea');
+  const modalArea = document.getElementById('modalArea');
   
+  fillModalByFavorites();
+
+  modalArea.addEventListener('click', function(event) {
+    const isRemoveButton = event.target.classList.contains('remove-button');
+    const modalWrapper = document.querySelector('.modal-wrapper');
+    const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
+
+    if (!isRemoveButton) {
+      return;
+    }
+
+    changeButtonView(event.target);
+    changeButtonView(productsAreaItem);
+    removeBeerFromFavorites(event.target.id);
+    refreshFavoritesButton();
+
+    if (!favoritesBeers.length) {
+      modalWrapper.remove();
+      
+      return;
+    }
+
+    modalArea.innerHTML ='';
+    fillModalByFavorites();
+  });
+}
+
+export function createModalArea() {
+  const modalWrapper = document.createElement('section');
+
+  modalWrapper.classList.add('modal-wrapper');
+  modalWrapper.innerHTML = `<div class="container modal-container" id="modalArea"></div>`;
+  PRODUCTS_AREA.after(modalWrapper);
+
+  addListenersInModalArea(modalWrapper);
+}
+
+export function fillModalByFavorites() {
   favoritesBeers.forEach(item => {
     const product = new Beer({
       name: item.name,
@@ -177,49 +216,64 @@ export function showFavoriteList() {
       isFavorite: item.isFavorite,
     });
 
-    favoritesArea.innerHTML += product.getHtml();
-  });
-
-  favoritesArea.addEventListener('click', function(event) {
-    const isRemoveButton = event.target.classList.contains('remove-button');
-
-    if (!isRemoveButton) {
-      return;
-    }
-
-    changeButtonView(event.target);
-    removeBeerFromFavorites(event.target.id);
-    refreshFavoritesButton();
-
-    if (!favoritesBeers.length) {
-      const favoritesWrapper = document.querySelector('.favorites-wrapper');
-      const productsAreaItem = document.getElementById(event.target.id).nextElementSibling.nextElementSibling;
-
-      favoritesWrapper.remove();
-      changeButtonView(productsAreaItem);
-      
-      return;
-    }
-
-    favoritesArea.innerHTML ='';
-    favoritesBeers.forEach(item => {
-      const product = new Beer({
-        name: item.name,
-        image: item.image,
-        description: item.description,
-        id: item.id,
-        isFavorite: item.isFavorite,
-      });
-
-      favoritesArea.innerHTML += product.getHtml();
-    });
+    modalArea.innerHTML += product.getHtml();
   });
 }
 
-export function createFavoritesArea() {
-  const favoritesWrapper = document.createElement('section');
+export function showSingleItem(itemId) {
+  createModalArea();
 
-  favoritesWrapper.classList.add('favorites-wrapper');
-  favoritesWrapper.innerHTML = `<div class="container favorites-container" id="favoritesArea"></div>`;
-  productsArea.after(favoritesWrapper);
+  const modalArea = document.getElementById('modalArea');
+  
+  fillModalBySingle(itemId);
+
+  modalArea.addEventListener('click', function(event) {
+    const isRemoveButton = event.target.classList.contains('remove-button');
+    const isAddButton = event.target.classList.contains('add-button');
+    const productsAreaItem = document.getElementById(event.target.id)?.nextElementSibling.nextElementSibling;
+
+    if (isRemoveButton) {
+      changeButtonView(event.target);
+      changeButtonView(productsAreaItem);
+      removeBeerFromFavorites(event.target.id);
+      refreshFavoritesButton();
+    }
+
+    if (isAddButton) {
+      changeButtonView(event.target);
+      changeButtonView(productsAreaItem);
+      addBeerToFavorites(event.target.id);
+      refreshFavoritesButton();
+    }
+  });
+}
+
+export function fillModalBySingle(itemId) {
+  const singleItem = foundBeers.find(item => item.id == itemId);
+
+  const product = new Beer({
+    name: singleItem.name,
+    image: singleItem.image,
+    description: singleItem.description,
+    id: singleItem.id,
+    isFavorite: singleItem.isFavorite,
+  });
+
+  modalArea.innerHTML = product.getHtml();
+}
+
+export function addListenersInModalArea(modalWrapper) {
+  document.addEventListener('click', function(event) {
+    const ismodalWrapper = event.target.classList.contains('modal-wrapper');
+
+    if (ismodalWrapper) {
+      modalWrapper.remove();
+    }
+  });
+
+  document.addEventListener('keydown', function(event) {
+    if (event.code == 'Escape') {
+      modalWrapper.remove();
+    }
+  });
 }
