@@ -51,7 +51,7 @@ export function searchMoreProducts(pageCount, searchValue) {
 
 export function showProducts(products) {
   products.forEach(item => {
-    const isFavoriteItem = favoritesBeers.find(favoritesBeer => favoritesBeer.id === item.id) ? true : false;
+    const isFavoriteItem = !!favoritesBeers.find((favoritesBeer) => favoritesBeer.id === item.id);
 
     const product = new Beer({
       name: item.name,
@@ -290,15 +290,18 @@ export function setLocalStorage() {
 }
 
 export function getLocalStorage() {
-  if (localStorage.getItem('searchHistory')) {
-    const searchHistoryStorage = JSON.parse(localStorage.getItem('searchHistory'));
+  const givenSearchHistory = localStorage.getItem('searchHistory');
+  const givenFavoritesBeers = localStorage.getItem('searchHistory');
+
+  if (givenSearchHistory) {
+    const searchHistoryStorage = JSON.parse(givenSearchHistory);
 
     searchHistoryStorage.forEach(item => searchHistory.add(item));
     showSearchHistory();
   }
 
-  if (localStorage.getItem('favoritesBeers')) {
-    const favoritesBeersStorage = JSON.parse(localStorage.getItem('favoritesBeers'));
+  if (givenFavoritesBeers) {
+    const favoritesBeersStorage = JSON.parse(givenFavoritesBeers);
 
     favoritesBeersStorage.forEach(item => favoritesBeers.push(item));
     refreshFavoritesButton();
