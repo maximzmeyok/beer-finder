@@ -291,7 +291,7 @@ export function setLocalStorage() {
 
 export function getLocalStorage() {
   const givenSearchHistory = localStorage.getItem('searchHistory');
-  const givenFavoritesBeers = localStorage.getItem('searchHistory');
+  const givenFavoritesBeers = localStorage.getItem('favoritesBeers');
 
   if (givenSearchHistory) {
     const searchHistoryStorage = JSON.parse(givenSearchHistory);
