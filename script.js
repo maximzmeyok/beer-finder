@@ -1,5 +1,5 @@
 import { SEARCH_INPUT, SEARCH_BUTTON, PRODUCTS_AREA, ARROW_BUTTON, HISTORY_AREA, FAVORITES_BUTTON } from './elements.js';
-import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView, refreshFavoritesButton, showFavoriteList, showSingleItem } from './functions.js';
+import { isValidRequest, markInvalid, markValid, searchProducts, searchMoreProducts, addBeerToFavorites, removeBeerFromFavorites, changeButtonView, refreshFavoritesButton, showFavoriteList, showSingleItem, setLocalStorage, getLocalStorage } from './functions.js';
 
 export const REGEXP = new RegExp("^[a-zA-Z0-9а-яА-ЯёЁ ]+$");
 export const searchHistory = new Set();
@@ -93,3 +93,7 @@ FAVORITES_BUTTON.addEventListener('click', function() {
   
   showFavoriteList();
 });
+
+window.addEventListener('beforeunload', setLocalStorage);
+
+window.addEventListener('load', getLocalStorage);
